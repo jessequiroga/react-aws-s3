@@ -19,7 +19,9 @@ const initialState: FileUploadState = {
 
 export default handleActions({
     [UPLOAD_FILE]: (state: FileUploadState, action) => {
-        console.log("upload file");
+        if (action && action.payload && action.payload.file) {
+            console.log("upload file" + action.payload.file.name);
+        }
         return { ...state, file: action.payload.file, status: 'pending', error: false };
     },
     [UPLOAD_FILE_START]: (state: FileUploadState, action) => {

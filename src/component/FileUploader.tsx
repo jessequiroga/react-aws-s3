@@ -48,7 +48,9 @@ class FileUploader extends Component<Props, State> {
           accept="image/*"
           onChange={this.getImage}
         />
-        <p>{`Status: ${this.props.uploads.status}`}</p>
+        <p>{`Status: ${this.props.uploads.status}, File: ${
+          this.props.uploads.file ? this.props.uploads.file.name : ""
+        }`}</p>
         <form onSubmit={this.onSubmitClicked}>
           <button id="file-upload-button">Upload</button>
         </form>
