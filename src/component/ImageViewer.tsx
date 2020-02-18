@@ -17,7 +17,6 @@ function ImageViewer() {
             />
           </div>
         </React.Fragment>
-        )}
       </div>
     </React.Fragment>
   );

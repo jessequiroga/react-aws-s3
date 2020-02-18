@@ -15,7 +15,7 @@ function uploadFile(file) {
   return new Promise(function(resolve, reject) {
     var params = {
       Bucket: process.env.REACT_APP_BUCKET_NAME,
-      Key: file.name,
+      Key: "test/"+file.name,
       ContentType: file.type,
       Body: file
     };

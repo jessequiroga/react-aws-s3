@@ -3,7 +3,6 @@ import {
   useUploadFileAction,
   useSelectedFileAction,
   useUploadState,
-  //useUploadFileStartAction,
   useUploadFileSuccessAction,
   useUploadFileFailedAction
 } from "../hook/upload/useUploadActions";
@@ -15,7 +14,6 @@ function FileUploader(): React.ReactElement {
   const onLoad = useUploadFileAction();
   const onSuccess = useUploadFileSuccessAction();
   const onFailed = useUploadFileFailedAction();
-  //const onStart = useUploadFileStartAction();
 
   const getImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
