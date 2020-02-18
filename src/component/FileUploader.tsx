@@ -1,21 +1,40 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
+import { FileUploadState } from "../store/reducer/upload";
 
-class FileUploader extends PureComponent {
-  //     static propTypes = {
-  //       status: PropTypes.string.isRequired,
-  //       error: PropTypes.oneOfType([
-  //           PropTypes.bool,
-  //           PropTypes.object,
-  //       ]).isRequired,
-  //       progress: PropTypes.number.isRequired,
-  //       files: PropTypes.arrayOf(PropTypes.string).isRequired,
-  //       uploadFiles: PropTypes.func.isRequired,
-  //   };
+type Props = {
+  uploads: FileUploadState;
+  uploadFile: (file: File) => void;
+};
+
+type State = {
+  file: File | null;
+};
+
+class FileUploader extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      file: null
+    };
+  }
+
   getImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
       const file = files[0];
       console.log(file.name);
+      this.setState({
+        file: file
+      });
+    }
+  };
+
+  onSubmitClicked = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (this.state.file) {
+      this.props.uploadFile(this.state.file);
+    } else {
+      console.log("file is null");
     }
   };
 
@@ -29,7 +48,8 @@ class FileUploader extends PureComponent {
           accept="image/*"
           onChange={this.getImage}
         />
-        <form>
+        <p>{`Status: ${this.props.uploads.status}`}</p>
+        <form onSubmit={this.onSubmitClicked}>
           <button id="file-upload-button">Upload</button>
         </form>
       </React.Fragment>
