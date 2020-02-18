@@ -1,27 +1,26 @@
-import React, { PureComponent } from "react";
+import React from "react";
+import { useUploadState } from "../hook/upload/useUploadActions";
 
-class ImageViewer extends PureComponent {
-  render() {
-    return (
-      <React.Fragment>
-        <h1>Retrieved Image from AWS S3 Bucket</h1>
-        <div className="preview-container">
-          <React.Fragment>
-            <div className="preview">
-              <img
-                id="show-picture"
-                src={""}
-                alt="File stored in AWS S3"
-                // onLoad={this.handleImageLoaded}
-                // onError={this.handleImageError}
-              />
-            </div>
-          </React.Fragment>
-          )}
-        </div>
-      </React.Fragment>
-    );
-  }
+function ImageViewer() {
+  const uploadState = useUploadState();
+
+  return (
+    <React.Fragment>
+      <h1>Retrieved Image from AWS S3 Bucket</h1>
+      <div className="preview-container">
+        <React.Fragment>
+          <div className="preview">
+            <img
+              id="show-picture"
+              src={uploadState.uploadedUrl as string}
+              alt="File stored in AWS S3"
+            />
+          </div>
+        </React.Fragment>
+        )}
+      </div>
+    </React.Fragment>
+  );
 }
 
 export default ImageViewer;
