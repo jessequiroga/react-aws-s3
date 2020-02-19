@@ -26,16 +26,18 @@ function FileUploader(): React.ReactElement {
 
   const onSubmitClicked = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onLoad();
-    uploadFile(uploadState.file)
-      .then(function(uploadedUrl) {
-        console.log("uploaded");
-        onSuccess(uploadedUrl);
-      })
-      .catch(function(err) {
-        console.log("upload failed- " + err);
-        onFailed(true);
-      });
+    if (uploadState.file) {
+      onLoad();
+      uploadFile(uploadState.file)
+        .then(function(uploadedUrl) {
+          console.log("uploaded");
+          onSuccess(uploadedUrl as string);
+        })
+        .catch(function(err) {
+          console.log("upload failed- " + err);
+          onFailed(true);
+        });
+    }
   };
 
   return (
