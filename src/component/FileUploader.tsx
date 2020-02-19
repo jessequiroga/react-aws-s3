@@ -8,7 +8,7 @@ import {
 } from "../hook/upload/useUploadActions";
 import uploadFile from "../api/uploadFileAWS";
 
-function FileUploader(): React.ReactElement {
+function FileUploader() {
   const uploadState = useUploadState();
   const onSelect = useSelectedFileAction();
   const onLoad = useUploadFileAction();
@@ -16,7 +16,7 @@ function FileUploader(): React.ReactElement {
   const onFailed = useUploadFileFailedAction();
 
   const getImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+    const { files } = e.target;
     if (files && files.length > 0) {
       const file = files[0];
       console.log(file.name);
@@ -29,19 +29,19 @@ function FileUploader(): React.ReactElement {
     if (uploadState.file) {
       onLoad();
       uploadFile(uploadState.file)
-        .then(function(uploadedUrl) {
+        .then(function success(uploadedUrl) {
           console.log("uploaded");
           onSuccess(uploadedUrl as string);
         })
-        .catch(function(err) {
-          console.log("upload failed- " + err);
+        .catch(function failed(err) {
+          console.log(`upload failed- ${err}`);
           onFailed(true);
         });
     }
   };
 
   return (
-    <React.Fragment>
+    <>
       <h1>Upload an image to AWS S3 Bucket</h1>
       <input
         id="upload-image"
@@ -49,13 +49,17 @@ function FileUploader(): React.ReactElement {
         accept="image/*"
         onChange={getImage}
       />
-      <p>{`Status: ${uploadState.status}, File: ${
-        uploadState.file ? uploadState.file.name : ""
-      }`}</p>
+      <p>
+        {`Status: ${uploadState.status}, File: ${
+          uploadState.file ? uploadState.file.name : ""
+        }`}
+      </p>
       <form onSubmit={onSubmitClicked}>
-        <button id="file-upload-button">Upload</button>
+        <button type="submit" id="file-upload-button">
+          Upload
+        </button>
       </form>
-    </React.Fragment>
+    </>
   );
 }
 

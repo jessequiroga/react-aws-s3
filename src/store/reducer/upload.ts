@@ -1,3 +1,4 @@
+import { handleActions } from "redux-actions";
 import {
   SELECTED_FILE,
   UPLOAD_FILE,
@@ -5,7 +6,6 @@ import {
   UPLOAD_FILE_SUCCESS,
   UPLOAD_FILE_FAILED
 } from "../action/upload";
-import { handleActions } from "redux-actions";
 
 export interface FileUploadState {
   file: File | null;
@@ -24,29 +24,27 @@ export default handleActions(
   {
     [SELECTED_FILE]: (state: FileUploadState, action) => {
       if (action && action.payload && action.payload.file) {
-        console.log("selected file" + action.payload.file.name);
+        console.log(`selected file${action.payload.file.name}`);
         return {
           ...state,
           file: action.payload.file,
           status: "file selected",
           error: false
         };
-      } else {
-        console.log(
-          "selected file- none" + action + action.payload + action.payload.file
-        );
-        return state;
       }
+      console.log(
+        `selected file- none${action}${action.payload}${action.payload.file}`
+      );
+      return state;
     },
-    [UPLOAD_FILE]: (state: FileUploadState, action) => {
+    [UPLOAD_FILE]: (state: FileUploadState) => {
       if (state.file) {
-        console.log("upload file" + state.file.name);
+        console.log(`upload file${state.file.name}`);
         return { ...state, status: "pending", error: false, uploadedUrl: "" };
-      } else {
-        return state;
       }
+      return state;
     },
-    [UPLOAD_FILE_START]: (state: FileUploadState, action) => {
+    [UPLOAD_FILE_START]: (state: FileUploadState) => {
       console.log("upload start");
       return { ...state, status: "in progress", error: false, uploadedUrl: "" };
     },
@@ -59,7 +57,7 @@ export default handleActions(
         uploadedUrl: action.payload.uploadedUrl
       };
     },
-    [UPLOAD_FILE_FAILED]: (state: FileUploadState, action) => {
+    [UPLOAD_FILE_FAILED]: (state: FileUploadState) => {
       console.log("upload failed");
       return { ...state, status: "error", error: true };
     }

@@ -13,6 +13,17 @@
     "@types/react-redux": "^7.1.7",
     "@types/redux-actions": "^2.6.1",
     "@types/redux-logger": "^3.0.7",
+    "@typescript-eslint/eslint-plugin": "^2.19.0",
+    "@typescript-eslint/parser": "^2.19.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-json": "^2.0.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.18.3",
     "aws-sdk": "^2.620.0",
     "dotenv": "^8.2.0",
     "react": "^16.12.0",
@@ -25,7 +36,12 @@
     "redux-logger": "^3.0.6",
     "typescript": "~3.7.2"
   },
+  "devDependencies": {
+    "prettier": "^1.19.1"
+  },
   "scripts": {
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint-fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
