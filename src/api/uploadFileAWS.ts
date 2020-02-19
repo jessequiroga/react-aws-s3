@@ -10,10 +10,7 @@ AWS.config = new AWS.Config({
 // Creating a S3 instance
 const s3 = new AWS.S3({ signatureVersion: "v4" });
 
-function uploadFile(file: File) {
-  console.log(
-    `Env setting: ${process.env.REACT_APP_S3_KEY} ${process.env.REACT_APP_S3_SECRET} ${process.env.REACT_APP_BUCKET_REGION} ${process.env.REACT_APP_BUCKET_NAME}`
-  );
+function uploadUsingPutMethod(file: File) {
   return new Promise(function upload(resolve, reject) {
     const params: AWS.S3.PutObjectRequest = {
       Bucket: process.env.REACT_APP_BUCKET_NAME
@@ -38,6 +35,66 @@ function uploadFile(file: File) {
       }
     });
   });
+}
+
+function uploadUsingPresignedUrl(file: File) {
+  return new Promise(function upload(resolve, reject) {
+    const paramsPut = {
+      Bucket: process.env.REACT_APP_BUCKET_NAME
+        ? process.env.REACT_APP_BUCKET_NAME
+        : "",
+      Key: `test/${file.name}`,
+      ContentType: file.type,
+      Expires: 60 * 60
+    };
+
+    s3.getSignedUrl("putObject", paramsPut, function _getPutUrl(
+      err: Error,
+      url: string
+    ): void {
+      if (err) {
+        reject(err);
+      }
+
+      fetch(url, { method: "PUT", body: file })
+        .then(() => {
+          console.log("File upload by AWS - success");
+          const paramsGet = {
+            Bucket: process.env.REACT_APP_BUCKET_NAME
+              ? process.env.REACT_APP_BUCKET_NAME
+              : "",
+            Key: `test/${file.name}`,
+            Expires: 60 * 60
+          };
+
+          s3.getSignedUrl("getObject", paramsGet, function _getGetUrl(
+            errGetObject: Error,
+            resGetUrl: string
+          ): void {
+            if (errGetObject) {
+              console.log("Get Url failed");
+              reject(new Error(errGetObject.message));
+            }
+
+            console.log("Get Url", resGetUrl);
+            resolve(resGetUrl);
+          });
+        })
+        .catch(e => {
+          console.log("File upload by AWS - upload failed");
+          reject(new Error(e));
+        });
+    });
+  });
+}
+
+function uploadFile(file: File) {
+  console.log(
+    `Env setting: ${process.env.REACT_APP_S3_KEY} ${process.env.REACT_APP_S3_SECRET} ${process.env.REACT_APP_BUCKET_REGION} ${process.env.REACT_APP_BUCKET_NAME}`
+  );
+
+  // return uploadUsingPutMethod(file);
+  return uploadUsingPresignedUrl(file);
 }
 
 export default uploadFile;

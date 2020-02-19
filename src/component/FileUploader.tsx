@@ -7,6 +7,7 @@ import {
   useUploadFileFailedAction
 } from "../hook/upload/useUploadActions";
 import uploadFile from "../api/uploadFileAWS";
+// import uploadFile from "../api/uploadFileMinio";
 
 function FileUploader() {
   const uploadState = useUploadState();
