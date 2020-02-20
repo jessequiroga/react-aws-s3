@@ -1,21 +1,30 @@
 import AWS, { AWSError } from "aws-sdk";
 
-// Configuring AWS
 AWS.config = new AWS.Config({
-  accessKeyId: process.env.REACT_APP_S3_KEY, // stored in the .env file
-  secretAccessKey: process.env.REACT_APP_S3_SECRET, // stored in the .env file
-  region: process.env.REACT_APP_BUCKET_REGION // This refers to your bucket configuration.
+  accessKeyId: process.env.REACT_APP_S3_KEY
+    ? process.env.REACT_APP_S3_KEY
+    : "minioadmin",
+  secretAccessKey: process.env.REACT_APP_S3_SECRET
+    ? process.env.REACT_APP_S3_SECRET
+    : "minioadmin",
+  region: process.env.REACT_APP_BUCKET_REGION
+    ? process.env.REACT_APP_BUCKET_REGION
+    : "ap-northeast-2", // This refers to your bucket configuration.
+  s3ForcePathStyle: true
 });
 
 // Creating a S3 instance
-const s3 = new AWS.S3({ signatureVersion: "v4" });
+const s3 = new AWS.S3(
+  process.env.REACT_APP_S3_KEY ? {} : { endpoint: "http://127.0.0.1:9000" }
+);
+const bucket = process.env.REACT_APP_BUCKET_NAME
+  ? process.env.REACT_APP_BUCKET_NAME
+  : "dvtest2020";
 
 function uploadUsingPutMethod(file: File) {
   return new Promise(function upload(resolve, reject) {
     const params: AWS.S3.PutObjectRequest = {
-      Bucket: process.env.REACT_APP_BUCKET_NAME
-        ? process.env.REACT_APP_BUCKET_NAME
-        : "",
+      Bucket: bucket,
       Key: `test/${file.name}`,
       ContentType: file.type,
       Body: file
@@ -27,7 +36,7 @@ function uploadUsingPutMethod(file: File) {
       } else {
         console.log("success");
         const url = s3.getSignedUrl("getObject", {
-          Bucket: process.env.REACT_APP_BUCKET_NAME,
+          Bucket: bucket,
           Key: params.Key
         });
         console.log(url);
@@ -40,9 +49,7 @@ function uploadUsingPutMethod(file: File) {
 function uploadUsingPresignedUrl(file: File) {
   return new Promise(function upload(resolve, reject) {
     const paramsPut = {
-      Bucket: process.env.REACT_APP_BUCKET_NAME
-        ? process.env.REACT_APP_BUCKET_NAME
-        : "",
+      Bucket: bucket,
       Key: `test/${file.name}`,
       ContentType: file.type,
       Expires: 60 * 60
@@ -60,9 +67,7 @@ function uploadUsingPresignedUrl(file: File) {
         .then(() => {
           console.log("File upload by AWS - success");
           const paramsGet = {
-            Bucket: process.env.REACT_APP_BUCKET_NAME
-              ? process.env.REACT_APP_BUCKET_NAME
-              : "",
+            Bucket: bucket,
             Key: `test/${file.name}`,
             Expires: 60 * 60
           };
@@ -93,8 +98,8 @@ function uploadFile(file: File) {
     `Env setting: ${process.env.REACT_APP_S3_KEY} ${process.env.REACT_APP_S3_SECRET} ${process.env.REACT_APP_BUCKET_REGION} ${process.env.REACT_APP_BUCKET_NAME}`
   );
 
-  // return uploadUsingPutMethod(file);
-  return uploadUsingPresignedUrl(file);
+  return uploadUsingPutMethod(file);
+  // return uploadUsingPresignedUrl(file);
 }
 
 export default uploadFile;
