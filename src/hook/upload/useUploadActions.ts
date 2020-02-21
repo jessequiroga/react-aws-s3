@@ -6,9 +6,9 @@ import {
   uploadFileStartAction,
   uploadFileSuccessAction,
   uploadFileFailedAction
-} from "../../store/action/upload";
-import { FileUploadState } from "../../store/reducer/upload";
-import { RootState } from "../../store/configureStore";
+} from "../../store/actions/upload";
+import { FileUploadState } from "../../store/reducers/upload";
+import { RootState } from "../../store";
 
 export function useUploadState(): FileUploadState {
   const uploadState = useSelector((state: RootState) => state.handleActions);

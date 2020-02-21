@@ -2,19 +2,13 @@ import React from "react";
 import {
   useUploadFileAction,
   useSelectedFileAction,
-  useUploadState,
-  useUploadFileSuccessAction,
-  useUploadFileFailedAction
+  useUploadState
 } from "../hook/upload/useUploadActions";
-import uploadFile from "../api/uploadFileAWS";
-// import uploadFile from "../api/uploadFileMinio";
 
 function FileUploader() {
   const uploadState = useUploadState();
   const onSelect = useSelectedFileAction();
   const onLoad = useUploadFileAction();
-  const onSuccess = useUploadFileSuccessAction();
-  const onFailed = useUploadFileFailedAction();
 
   const getImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
@@ -29,15 +23,15 @@ function FileUploader() {
     e.preventDefault();
     if (uploadState.file) {
       onLoad();
-      uploadFile(uploadState.file)
-        .then(function success(uploadedUrl) {
-          console.log("uploaded");
-          onSuccess(uploadedUrl as string);
-        })
-        .catch(function failed(err) {
-          console.log(`upload failed- ${err}`);
-          onFailed(true);
-        });
+      // uploadFile(uploadState.file)
+      //   .then(function success(uploadedUrl) {
+      //     console.log("uploaded");
+      //     onSuccess(uploadedUrl as string);
+      //   })
+      //   .catch(function failed(err) {
+      //     console.log(`upload failed- ${err}`);
+      //     onFailed(true);
+      //   });
     }
   };
 
