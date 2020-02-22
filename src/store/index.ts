@@ -6,9 +6,9 @@ import {
   applyMiddleware
 } from "redux";
 import logger from "redux-logger";
-import { createEpicMiddleware } from "redux-observable";
+import createSagaMiddleware from "redux-saga";
 import handleActions from "./reducers/upload";
-import epics from "./epics";
+import rootSaga from "./sagas";
 
 declare global {
   interface Window {
@@ -25,10 +25,10 @@ export type RootState = ReturnType<typeof rootReducer>;
 const composeEnhancers =
   (window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
-const epicMiddleware = createEpicMiddleware();
+const sagaMiddleware = createSagaMiddleware();
 
 function configureStore(initialState?: RootState): Store {
-  const middleware = [epicMiddleware, logger];
+  const middleware = [sagaMiddleware, logger];
   const enhancer = composeEnhancers(applyMiddleware(...middleware));
   return createStore(rootReducer, initialState, enhancer);
 }
@@ -36,4 +36,4 @@ function configureStore(initialState?: RootState): Store {
 const store = configureStore();
 export { store as default };
 
-epicMiddleware.run(epics as any);
+sagaMiddleware.run(rootSaga);

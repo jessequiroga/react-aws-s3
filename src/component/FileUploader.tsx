@@ -23,15 +23,6 @@ function FileUploader() {
     e.preventDefault();
     if (uploadState.file) {
       onLoad();
-      // uploadFile(uploadState.file)
-      //   .then(function success(uploadedUrl) {
-      //     console.log("uploaded");
-      //     onSuccess(uploadedUrl as string);
-      //   })
-      //   .catch(function failed(err) {
-      //     console.log(`upload failed- ${err}`);
-      //     onFailed(true);
-      //   });
     }
   };
 

@@ -77,7 +77,7 @@ function uploadUsingPresignedUrl(file: File) {
             resGetUrl: string
           ): void {
             if (errGetObject) {
-              console.log("Get Url failed");
+              console.log(`Get Url failed${errGetObject.message}`);
               reject(new Error(errGetObject.message));
             }
 
