@@ -7,7 +7,8 @@ import {
 } from "redux";
 import logger from "redux-logger";
 import createSagaMiddleware from "redux-saga";
-import handleActions from "./reducers/upload";
+import uploadReducer from "./reducers/upload";
+import downloadReducer from "./reducers/download";
 import rootSaga from "./sagas";
 
 declare global {
@@ -17,7 +18,8 @@ declare global {
 }
 
 const rootReducer = combineReducers({
-  handleActions
+  uploadReducer,
+  downloadReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

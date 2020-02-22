@@ -5,7 +5,7 @@ export interface FileUploadState {
   file: File | null;
   status: string;
   error: boolean;
-  uploadedUrl: string | null;
+  uploadedUrl: string;
 }
 const initialState: FileUploadState = {
   file: null,
@@ -14,7 +14,7 @@ const initialState: FileUploadState = {
   uploadedUrl: ""
 };
 
-export default handleActions(
+const uploadReducer = handleActions(
   {
     [actionTypes.SELECTED_FILE]: (state: FileUploadState, action) => {
       if (action && action.payload && action.payload.file) {
@@ -58,3 +58,5 @@ export default handleActions(
   },
   initialState
 );
+
+export default uploadReducer;

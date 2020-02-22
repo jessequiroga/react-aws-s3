@@ -1,7 +1,7 @@
 import { takeEvery, call, put, select } from "redux-saga/effects";
 import { actionTypes } from "../actions/upload";
 import * as actions from "../actions/upload";
-import uploadFile from "../../api/uploadFileAWS";
+import uploadFile from "../../api/FileUpload";
 import { RootState } from "..";
 
 function* uploadAsync(): Generator {
@@ -12,7 +12,7 @@ function* uploadAsync(): Generator {
   try {
     const resUrl = yield call(
       uploadFile,
-      (state as RootState).handleActions.file as File
+      (state as RootState).uploadReducer.file as File
     );
     yield put(actions.uploadFileSuccessAction(resUrl as string));
   } catch (error) {

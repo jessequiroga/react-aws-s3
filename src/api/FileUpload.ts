@@ -1,42 +1,22 @@
 import AWS, { AWSError } from "aws-sdk";
-
-AWS.config = new AWS.Config({
-  accessKeyId: process.env.REACT_APP_S3_KEY
-    ? process.env.REACT_APP_S3_KEY
-    : "minioadmin",
-  secretAccessKey: process.env.REACT_APP_S3_SECRET
-    ? process.env.REACT_APP_S3_SECRET
-    : "minioadmin",
-  region: process.env.REACT_APP_BUCKET_REGION
-    ? process.env.REACT_APP_BUCKET_REGION
-    : "ap-northeast-2", // This refers to your bucket configuration.
-  s3ForcePathStyle: true
-});
-
-// Creating a S3 instance
-const s3 = new AWS.S3(
-  process.env.REACT_APP_S3_KEY ? {} : { endpoint: "http://127.0.0.1:9000" }
-);
-const bucket = process.env.REACT_APP_BUCKET_NAME
-  ? process.env.REACT_APP_BUCKET_NAME
-  : "dvtest2020";
+import { s3Instance, s3Bucket } from "./getS3Intance";
 
 function uploadUsingPutMethod(file: File) {
   return new Promise(function upload(resolve, reject) {
     const params: AWS.S3.PutObjectRequest = {
-      Bucket: bucket,
+      Bucket: s3Bucket,
       Key: `test/${file.name}`,
       ContentType: file.type,
       Body: file
     };
 
-    s3.putObject(params).send((err: AWSError) => {
+    s3Instance.putObject(params).send((err: AWSError) => {
       if (err) {
         reject(new Error(`Request is failed - ${err}`));
       } else {
         console.log("success");
-        const url = s3.getSignedUrl("getObject", {
-          Bucket: bucket,
+        const url = s3Instance.getSignedUrl("getObject", {
+          Bucket: s3Bucket,
           Key: params.Key
         });
         console.log(url);
@@ -46,16 +26,17 @@ function uploadUsingPutMethod(file: File) {
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 function uploadUsingPresignedUrl(file: File) {
   return new Promise(function upload(resolve, reject) {
     const paramsPut = {
-      Bucket: bucket,
+      Bucket: s3Bucket,
       Key: `test/${file.name}`,
       ContentType: file.type,
       Expires: 60 * 60
     };
 
-    s3.getSignedUrl("putObject", paramsPut, function _getPutUrl(
+    s3Instance.getSignedUrl("putObject", paramsPut, function _getPutUrl(
       err: Error,
       url: string
     ): void {
@@ -67,12 +48,12 @@ function uploadUsingPresignedUrl(file: File) {
         .then(() => {
           console.log("File upload by AWS - success");
           const paramsGet = {
-            Bucket: bucket,
+            Bucket: s3Bucket,
             Key: `test/${file.name}`,
             Expires: 60 * 60
           };
 
-          s3.getSignedUrl("getObject", paramsGet, function _getGetUrl(
+          s3Instance.getSignedUrl("getObject", paramsGet, function _getGetUrl(
             errGetObject: Error,
             resGetUrl: string
           ): void {
