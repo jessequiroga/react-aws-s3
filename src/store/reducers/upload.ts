@@ -54,6 +54,10 @@ const uploadReducer = handleActions(
     [actionTypes.UPLOAD_FILE_FAILED]: (state: FileUploadState) => {
       console.log("upload failed");
       return { ...state, status: "error", error: true };
+    },
+    [actionTypes.UPLOAD_STATUS_RESET]: () => {
+      console.log("upload status reset");
+      return initialState;
     }
   },
   initialState

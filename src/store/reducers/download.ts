@@ -25,6 +25,7 @@ const downloadReducer = handleActions(
         status: "pending",
         error: "",
         data: "",
+        progress: 0,
         key: action.payload.key
       };
     },
@@ -35,12 +36,23 @@ const downloadReducer = handleActions(
         status: "in progress"
       };
     },
+    [actionTypes.DOWNLOAD_FILE_PROGRESS]: (
+      state: FileDownloadState,
+      action
+    ) => {
+      console.log("download progress");
+      return {
+        ...state,
+        progress: action.payload.progress
+      };
+    },
     [actionTypes.DOWNLOAD_FILE_SUCCESS]: (state: FileDownloadState, action) => {
       console.log("download success");
       return {
         ...state,
         status: "done",
-        data: action.payload.data
+        data: action.payload.data,
+        progress: 100
       };
     },
     [actionTypes.DOWNLOAD_FILE_FAILED]: (state: FileDownloadState, action) => {
@@ -49,7 +61,8 @@ const downloadReducer = handleActions(
         ...state,
         status: "error",
         key: "",
-        error: action.payload.error
+        error: action.payload.error,
+        progress: 0
       };
     }
   },

@@ -1,63 +1,60 @@
 import React from "react";
-import { useUploadState } from "../hook/upload/useUploadActions";
+import {
+  useUploadState,
+  useResetUploadStatusAction
+} from "../hook/upload/useUploadActions";
 import {
   useDownloadState,
   useDownloadFileAction
 } from "../hook/useDownloadAcrions";
 import "bootstrap/dist/css/bootstrap.css";
 
-function DrawProgress(): React.ReactElement {
-  return (
-    <div className="container">
-      <div className="spinner-border" />
-    </div>
-  );
-}
+function ViewerBody(): React.ReactElement {
+  const downloadState = useDownloadState();
 
-type Props = {
-  data: string;
-};
+  const Content = () => {
+    if (downloadState.status === "done") {
+      return (
+        <>
+          <div className="preview-container">
+            <img
+              id="show-picture"
+              src={downloadState.data}
+              alt="File stored in AWS S3"
+              width="600"
+            />
+          </div>
+        </>
+      );
+    }
+    return <div />;
+  };
 
-function DrawImage({ data }: Props): React.ReactElement {
   return (
-    <div className="preview-container">
-      <img
-        id="show-picture"
-        src={data}
-        alt="File stored in AWS S3"
-        width="600"
-      />
-    </div>
+    <>
+      <h1>Retrieved Image from AWS S3 Bucket</h1>
+      <p>{`Status: ${downloadState.status}, File: ${downloadState.key}, Progress: ${downloadState.progress}`}</p>
+      <Content />
+    </>
   );
 }
 
 function ImageViewer(): React.ReactElement {
   const uploadState = useUploadState();
+  const uploadReset = useResetUploadStatusAction();
   const downloadState = useDownloadState();
   const downloadAction = useDownloadFileAction();
 
   if (
     uploadState.uploadedKey !== "" &&
-    uploadState.uploadedKey !== downloadState.key
+    uploadState.uploadedKey !== downloadState.key &&
+    uploadState.status === "done"
   ) {
     downloadAction(uploadState.uploadedKey);
+    uploadReset();
   }
 
-  if (downloadState.status === "in progress") {
-    return (
-      <>
-        <h1>Retrieved Image from AWS S3 Bucket</h1>
-        <DrawProgress />
-      </>
-    );
-  }
-
-  return (
-    <>
-      <h1>Retrieved Image from AWS S3 Bucket</h1>
-      <DrawImage data={downloadState.data} />
-    </>
-  );
+  return <ViewerBody />;
 }
 
 export default ImageViewer;

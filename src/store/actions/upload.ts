@@ -5,7 +5,8 @@ export const actionTypes = {
   UPLOAD_FILE: "UPLOAD_FILE",
   UPLOAD_FILE_START: "UPLOAD_FILE_START",
   UPLOAD_FILE_SUCCESS: "UPLOAD_FILE_SUCCESS",
-  UPLOAD_FILE_FAILED: "UPLOAD_FILE_FAILED"
+  UPLOAD_FILE_FAILED: "UPLOAD_FILE_FAILED",
+  UPLOAD_STATUS_RESET: "UPLOAD_STATUS_RESET"
 };
 
 export const selectedFileAction = createAction(
@@ -25,4 +26,7 @@ export const uploadFileSuccessAction = createAction(
 export const uploadFileFailedAction = createAction(
   actionTypes.UPLOAD_FILE_FAILED,
   (error: boolean) => ({ error })
+);
+export const uploadStatusResetAction = createAction(
+  actionTypes.UPLOAD_STATUS_RESET
 );

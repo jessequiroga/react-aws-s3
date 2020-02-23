@@ -2,7 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useCallback } from "react";
 import {
   selectedFileAction,
-  uploadFileAction
+  uploadFileAction,
+  uploadStatusResetAction
 } from "../../store/actions/upload";
 import { FileUploadState } from "../../store/reducers/upload";
 import { RootState } from "../../store";
@@ -28,4 +29,12 @@ export function useUploadFileAction() {
     dispatch(uploadFileAction());
   }, [dispatch]);
   return onLoad;
+}
+
+export function useResetUploadStatusAction() {
+  const dispatch = useDispatch();
+  const onReset = useCallback(() => {
+    dispatch(uploadStatusResetAction());
+  }, [dispatch]);
+  return onReset;
 }

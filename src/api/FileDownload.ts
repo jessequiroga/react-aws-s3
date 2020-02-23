@@ -9,7 +9,7 @@ function encode(data: any) {
   return btoa(str).replace(/.{76}(?=.)/g, "$&\n");
 }
 
-function downloadUsingGetMethod(key: string): Promise<string> {
+function downloadUsingGetMethod(key: string, callbackFn: any): Promise<string> {
   return new Promise(function upload(resolve, reject) {
     const params: AWS.S3.GetObjectRequest = {
       Bucket: s3Bucket,
@@ -19,7 +19,8 @@ function downloadUsingGetMethod(key: string): Promise<string> {
     s3Instance
       .getObject(params)
       .on("httpDownloadProgress", function proc(progress) {
-        console.log(progress);
+        const curProg = Math.round((progress.loaded * 100) / progress.total);
+        callbackFn(curProg);
       })
       .send(function download(err: AWSError, data: AWS.S3.GetObjectOutput) {
         if (err) {
@@ -28,10 +29,14 @@ function downloadUsingGetMethod(key: string): Promise<string> {
           console.log(
             `getObject success - ${data.Metadata}, ${data.ContentType}, ${data.ContentEncoding}`
           );
-          const imgData = `data:${data.ContentType};base64,${encode(
-            data.Body
-          )}`;
-          resolve(imgData);
+          if (data.ContentType?.includes("image")) {
+            const imgData = `data:${data.ContentType};base64,${encode(
+              data.Body
+            )}`;
+            resolve(imgData);
+          } else {
+            reject(new Error(`Downloaded file is not an image type.`));
+          }
         }
       });
   });
@@ -48,8 +53,8 @@ function downloadUsingGetMethod(key: string): Promise<string> {
 //     });
 // }
 
-function downloadFile(key: string) {
-  return downloadUsingGetMethod(key);
+function downloadFile(key: string, callbackFn: any) {
+  return downloadUsingGetMethod(key, callbackFn);
 }
 
 export default downloadFile;
