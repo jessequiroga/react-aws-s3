@@ -1,4 +1,5 @@
 import React from "react";
+import { Container, ProgressBar } from "react-bootstrap";
 import {
   useUploadState,
   useResetUploadStatusAction
@@ -7,27 +8,44 @@ import {
   useDownloadState,
   useDownloadFileAction
 } from "../hook/useDownloadAcrions";
-import "bootstrap/dist/css/bootstrap.css";
 
 function ViewerBody(): React.ReactElement {
   const downloadState = useDownloadState();
 
-  const Content = () => {
+  const Content = (): React.ReactElement => {
     if (downloadState.status === "done") {
       return (
         <>
-          <div className="preview-container">
+          <Container>
             <img
               id="show-picture"
               src={downloadState.data}
               alt="File stored in AWS S3"
               width="600"
             />
+          </Container>
+        </>
+      );
+    }
+
+    if (downloadState.status === "in progress") {
+      return (
+        <>
+          <div className="prog-container" style={{ width: 300 }}>
+            <ProgressBar
+              now={downloadState.progress}
+              label={`${downloadState.progress}%`}
+            />
           </div>
         </>
       );
     }
-    return <div />;
+
+    return (
+      <>
+        <div />
+      </>
+    );
   };
 
   return (

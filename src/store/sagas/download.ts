@@ -7,15 +7,17 @@ import { RootState } from "..";
 
 type downloaderType = {
   prom: Promise<string>;
-  channel: EventChannel<any>;
+  channel: EventChannel<number | END>;
 };
 
 function createDownloader(fileKey: string): downloaderType {
-  let emit: { (arg0: number): void; (input: unknown): void };
-  const chan: EventChannel<any> = eventChannel(emitter => {
+  let emit: { (arg0: number): void; (input: END): void };
+  const chan: EventChannel<number | END> = eventChannel(emitter => {
     emit = emitter;
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
   });
+
   const downloadProgressCb = (proc: number) => {
     console.log(`Proc callback: ${proc}`);
     emit(proc);
@@ -30,7 +32,7 @@ function createDownloader(fileKey: string): downloaderType {
   return { prom: downloadPromise, channel: chan };
 }
 
-function* downloadProgressWatcher(chan: EventChannel<any>) {
+function* downloadProgressWatcher(chan: EventChannel<number | END>) {
   while (true) {
     const progress = yield take(chan);
     yield put(actions.downloadFileProgressAction(progress));

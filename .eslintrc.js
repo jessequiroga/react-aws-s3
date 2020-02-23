@@ -46,8 +46,7 @@ module.exports = exports = {
     'import/prefer-default-export': WARN,
     // warn: Something is already declared in the upper scope
     'no-shadow': [WARN, { builtinGlobals: false, hoist: 'functions', allow: [] }],
-    "no-console": "off",
-    "@typescript-eslint/explicit-function-return-type": "off"
+    "no-console": "off"
   },
   env: {
     browser: true,
