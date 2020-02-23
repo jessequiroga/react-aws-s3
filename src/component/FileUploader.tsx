@@ -5,12 +5,12 @@ import {
   useUploadState
 } from "../hook/upload/useUploadActions";
 
-function FileUploader() {
+function FileUploader(): React.ReactElement {
   const uploadState = useUploadState();
   const onSelect = useSelectedFileAction();
   const onLoad = useUploadFileAction();
 
-  const getImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const getImage = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { files } = e.target;
     if (files && files.length > 0) {
       const file = files[0];
@@ -19,7 +19,7 @@ function FileUploader() {
     }
   };
 
-  const onSubmitClicked = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmitClicked = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (uploadState.file) {
       onLoad();

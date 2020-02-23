@@ -1,7 +1,7 @@
 import AWS, { AWSError } from "aws-sdk";
 import { s3Instance, s3Bucket } from "./getS3Intance";
 
-function uploadUsingPutMethod(file: File) {
+function uploadUsingPutMethod(file: File): Promise<string> {
   return new Promise(function upload(resolve, reject) {
     const params: AWS.S3.PutObjectRequest = {
       Bucket: s3Bucket,
@@ -22,7 +22,7 @@ function uploadUsingPutMethod(file: File) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-function uploadUsingPresignedUrl(file: File) {
+function uploadUsingPresignedUrl(file: File): Promise<string> {
   return new Promise(function upload(resolve, reject) {
     const paramsPut = {
       Bucket: s3Bucket,
@@ -52,7 +52,7 @@ function uploadUsingPresignedUrl(file: File) {
   });
 }
 
-function uploadFile(file: File) {
+function uploadFile(file: File): Promise<string> {
   console.log(
     `Env setting: ${process.env.REACT_APP_S3_KEY} ${process.env.REACT_APP_S3_SECRET} ${process.env.REACT_APP_BUCKET_REGION} ${process.env.REACT_APP_BUCKET_NAME}`
   );

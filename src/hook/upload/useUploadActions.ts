@@ -13,7 +13,7 @@ export function useUploadState(): FileUploadState {
   return uploadState;
 }
 
-export function useSelectedFileAction() {
+export function useSelectedFileAction(): Function {
   const dispatch = useDispatch();
   const onSelect = useCallback(
     (file: File) => dispatch(selectedFileAction(file)),
@@ -23,7 +23,7 @@ export function useSelectedFileAction() {
   return onSelect;
 }
 
-export function useUploadFileAction() {
+export function useUploadFileAction(): Function {
   const dispatch = useDispatch();
   const onLoad = useCallback(() => {
     dispatch(uploadFileAction());
@@ -31,10 +31,11 @@ export function useUploadFileAction() {
   return onLoad;
 }
 
-export function useResetUploadStatusAction() {
+export function useResetUploadStatusAction(): Function {
   const dispatch = useDispatch();
   const onReset = useCallback(() => {
     dispatch(uploadStatusResetAction());
   }, [dispatch]);
+
   return onReset;
 }

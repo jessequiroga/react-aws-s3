@@ -11,7 +11,7 @@ export function useDownloadState(): FileDownloadState {
   return downloadState;
 }
 
-export function useDownloadFileAction() {
+export function useDownloadFileAction(): Function {
   const dispatch = useDispatch();
   const onDownload = useCallback(
     (key: string) => {
