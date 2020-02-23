@@ -6,12 +6,14 @@ export interface FileDownloadState {
   data: string;
   error: string;
   key: string;
+  progress: number;
 }
 const initialState: FileDownloadState = {
   status: "init",
   data: "",
   error: "",
-  key: ""
+  key: "",
+  progress: 0
 };
 
 const downloadReducer = handleActions(
@@ -38,8 +40,7 @@ const downloadReducer = handleActions(
       return {
         ...state,
         status: "done",
-        data: action.payload.data,
-        key: ""
+        data: action.payload.data
       };
     },
     [actionTypes.DOWNLOAD_FILE_FAILED]: (state: FileDownloadState, action) => {

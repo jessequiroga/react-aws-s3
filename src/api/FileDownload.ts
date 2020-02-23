@@ -16,20 +16,24 @@ function downloadUsingGetMethod(key: string): Promise<string> {
       Key: key
     };
 
-    s3Instance.getObject(params, function download(
-      err: AWSError,
-      data: AWS.S3.GetObjectOutput
-    ) {
-      if (err) {
-        reject(new Error(`GetObject Request is failed - ${err}`));
-      } else {
-        console.log(
-          `getObject success - ${data.Metadata}, ${data.ContentType}, ${data.ContentEncoding}`
-        );
-        const imgData = `data:${data.ContentType};base64,${encode(data.Body)}`;
-        resolve(imgData);
-      }
-    });
+    s3Instance
+      .getObject(params)
+      .on("httpDownloadProgress", function proc(progress) {
+        console.log(progress);
+      })
+      .send(function download(err: AWSError, data: AWS.S3.GetObjectOutput) {
+        if (err) {
+          reject(new Error(`GetObject Request is failed - ${err}`));
+        } else {
+          console.log(
+            `getObject success - ${data.Metadata}, ${data.ContentType}, ${data.ContentEncoding}`
+          );
+          const imgData = `data:${data.ContentType};base64,${encode(
+            data.Body
+          )}`;
+          resolve(imgData);
+        }
+      });
   });
 }
 

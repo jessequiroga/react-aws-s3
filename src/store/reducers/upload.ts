@@ -5,13 +5,13 @@ export interface FileUploadState {
   file: File | null;
   status: string;
   error: boolean;
-  uploadedUrl: string;
+  uploadedKey: string;
 }
 const initialState: FileUploadState = {
   file: null,
   status: "init",
   error: false,
-  uploadedUrl: ""
+  uploadedKey: ""
 };
 
 const uploadReducer = handleActions(
@@ -48,7 +48,7 @@ const uploadReducer = handleActions(
         ...state,
         status: "done",
         error: false,
-        uploadedUrl: action.payload.uploadedUrl
+        uploadedKey: action.payload.uploadedKey
       };
     },
     [actionTypes.UPLOAD_FILE_FAILED]: (state: FileUploadState) => {

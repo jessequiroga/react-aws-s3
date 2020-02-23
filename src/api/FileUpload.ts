@@ -15,12 +15,7 @@ function uploadUsingPutMethod(file: File) {
         reject(new Error(`Request is failed - ${err}`));
       } else {
         console.log("success");
-        const url = s3Instance.getSignedUrl("getObject", {
-          Bucket: s3Bucket,
-          Key: params.Key
-        });
-        console.log(url);
-        resolve(url);
+        resolve(`test/${file.name}`);
       }
     });
   });
@@ -47,24 +42,7 @@ function uploadUsingPresignedUrl(file: File) {
       fetch(url, { method: "PUT", body: file })
         .then(() => {
           console.log("File upload by AWS - success");
-          const paramsGet = {
-            Bucket: s3Bucket,
-            Key: `test/${file.name}`,
-            Expires: 60 * 60
-          };
-
-          s3Instance.getSignedUrl("getObject", paramsGet, function _getGetUrl(
-            errGetObject: Error,
-            resGetUrl: string
-          ): void {
-            if (errGetObject) {
-              console.log(`Get Url failed${errGetObject.message}`);
-              reject(new Error(errGetObject.message));
-            }
-
-            console.log("Get Url", resGetUrl);
-            resolve(resGetUrl);
-          });
+          resolve(`test/${file.name}`);
         })
         .catch(e => {
           console.log("File upload by AWS - upload failed");

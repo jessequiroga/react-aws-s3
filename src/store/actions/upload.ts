@@ -20,7 +20,7 @@ export const uploadFileStartAction = createAction(
 );
 export const uploadFileSuccessAction = createAction(
   actionTypes.UPLOAD_FILE_SUCCESS,
-  (uploadedUrl: string) => ({ uploadedUrl })
+  (uploadedKey: string) => ({ uploadedKey })
 );
 export const uploadFileFailedAction = createAction(
   actionTypes.UPLOAD_FILE_FAILED,

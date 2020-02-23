@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useUploadState } from "../hook/upload/useUploadActions";
-import getKeyList from "../api/BucketInfo";
 import {
   useDownloadState,
   useDownloadFileAction
@@ -16,16 +15,15 @@ function DrawProgress(): React.ReactElement {
 }
 
 type Props = {
-  url: string;
   data: string;
 };
 
-function DrawImage({ url, data }: Props): React.ReactElement {
+function DrawImage({ data }: Props): React.ReactElement {
   return (
     <div className="preview-container">
       <img
         id="show-picture"
-        src={url || data}
+        src={data}
         alt="File stored in AWS S3"
         width="600"
       />
@@ -36,24 +34,14 @@ function DrawImage({ url, data }: Props): React.ReactElement {
 function ImageViewer(): React.ReactElement {
   const uploadState = useUploadState();
   const downloadState = useDownloadState();
-  const onDownload = useDownloadFileAction();
+  const downloadAction = useDownloadFileAction();
 
-  useEffect(() => {
-    if (!uploadState.uploadedUrl) {
-      getKeyList()
-        .then((keyList: string[]) => {
-          if (keyList.length > 0) {
-            console.log("get Image");
-            onDownload(keyList[0]);
-          } else {
-            console.log("no files");
-          }
-        })
-        .catch((err: Error) => {
-          console.log(err);
-        });
-    }
-  }, []);
+  if (
+    uploadState.uploadedKey !== "" &&
+    uploadState.uploadedKey !== downloadState.key
+  ) {
+    downloadAction(uploadState.uploadedKey);
+  }
 
   if (downloadState.status === "in progress") {
     return (
@@ -67,7 +55,7 @@ function ImageViewer(): React.ReactElement {
   return (
     <>
       <h1>Retrieved Image from AWS S3 Bucket</h1>
-      <DrawImage url={uploadState.uploadedUrl} data={downloadState.data} />
+      <DrawImage data={downloadState.data} />
     </>
   );
 }
