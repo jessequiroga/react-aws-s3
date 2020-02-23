@@ -51,7 +51,9 @@ function ViewerBody(): React.ReactElement {
   return (
     <>
       <h1>Retrieved Image from AWS S3 Bucket</h1>
-      <p>{`Status: ${downloadState.status}, File: ${downloadState.key}, Progress: ${downloadState.progress}`}</p>
+      <p>
+        {`Status: ${downloadState.status}, File: ${downloadState.key}, Progress: ${downloadState.progress}`}
+      </p>
       <Content />
     </>
   );

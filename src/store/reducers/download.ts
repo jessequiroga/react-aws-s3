@@ -56,7 +56,8 @@ const downloadReducer = handleActions(
       };
     },
     [actionTypes.DOWNLOAD_FILE_FAILED]: (state: FileDownloadState, action) => {
-      console.log("download failed");
+      console.log("download failed", action.payload.error);
+      alert(action.payload.error);
       return {
         ...state,
         status: "error",

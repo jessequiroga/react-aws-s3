@@ -46,7 +46,8 @@ module.exports = exports = {
     'import/prefer-default-export': WARN,
     // warn: Something is already declared in the upper scope
     'no-shadow': [WARN, { builtinGlobals: false, hoist: 'functions', allow: [] }],
-    "no-console": "off"
+    "no-console": "off",
+    "no-alert": "off"
   },
   env: {
     browser: true,

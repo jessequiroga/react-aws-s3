@@ -25,5 +25,5 @@ export const downloadFileSuccessAction = createAction(
 );
 export const downloadFileFailedAction = createAction(
   actionTypes.DOWNLOAD_FILE_FAILED,
-  (error: string) => ({ error })
+  (error: Error) => ({ error })
 );

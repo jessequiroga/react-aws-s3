@@ -31,12 +31,14 @@ function downloadUsingGetMethod(
           console.log(
             `getObject success - ${data.Metadata}, ${data.ContentType}, ${data.ContentEncoding}`
           );
-          if (data.ContentType?.includes("image")) {
+          if (data.ContentType && data.ContentType.includes("image")) {
+            console.log(`file type is image`);
             const imgData = `data:${data.ContentType};base64,${encode(
               data.Body
             )}`;
             resolve(imgData);
           } else {
+            console.log(`file type is not image`);
             reject(new Error(`Downloaded file is not an image type.`));
           }
         }

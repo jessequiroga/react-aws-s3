@@ -55,7 +55,8 @@ function* downloadAsync(): Generator {
     const res = yield call(() => (downloader as downloaderType).prom);
     yield put(actions.downloadFileSuccessAction(res as string));
   } catch (error) {
-    yield put(actions.downloadFileFailedAction(error));
+    const errMess = error.message;
+    yield put(actions.downloadFileFailedAction(errMess));
   }
 }
 
