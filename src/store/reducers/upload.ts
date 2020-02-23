@@ -5,12 +5,14 @@ export interface FileUploadState {
   file: File | null;
   status: string;
   error: boolean;
+  progress: number;
   uploadedKey: string;
 }
 const initialState: FileUploadState = {
   file: null,
   status: "init",
   error: false,
+  progress: 0,
   uploadedKey: ""
 };
 
@@ -42,6 +44,10 @@ const uploadReducer = handleActions(
       console.log("upload start");
       return { ...state, status: "in progress", error: false, uploadedUrl: "" };
     },
+    [actionTypes.UPLOAD_FILE_PROGRESS]: (state: FileUploadState, action) => {
+      console.log("upload progress");
+      return { ...state, progress: action.payload.progress };
+    },
     [actionTypes.UPLOAD_FILE_SUCCESS]: (state: FileUploadState, action) => {
       console.log("upload success");
       return {
@@ -54,6 +60,14 @@ const uploadReducer = handleActions(
     [actionTypes.UPLOAD_FILE_FAILED]: (state: FileUploadState) => {
       console.log("upload failed");
       return { ...state, status: "error", error: true };
+    },
+    [actionTypes.UPLOAD_FILE_CANCEL]: (state: FileUploadState) => {
+      console.log("upload cancel require");
+      return { ...state, status: "aborting..." };
+    },
+    [actionTypes.UPLOAD_FILE_CANCELED]: (state: FileUploadState) => {
+      console.log("upload cancel require");
+      return { ...state, status: "aborted", file: null };
     },
     [actionTypes.UPLOAD_STATUS_RESET]: () => {
       console.log("upload status reset");

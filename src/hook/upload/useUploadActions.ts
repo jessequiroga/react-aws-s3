@@ -3,7 +3,8 @@ import { useCallback } from "react";
 import {
   selectedFileAction,
   uploadFileAction,
-  uploadStatusResetAction
+  uploadStatusResetAction,
+  uploadFileCancelAction
 } from "../../store/actions/upload";
 import { FileUploadState } from "../../store/reducers/upload";
 import { RootState } from "../../store";
@@ -27,6 +28,14 @@ export function useUploadFileAction(): Function {
   const dispatch = useDispatch();
   const onLoad = useCallback(() => {
     dispatch(uploadFileAction());
+  }, [dispatch]);
+  return onLoad;
+}
+
+export function useUploadFileCancelAction(): Function {
+  const dispatch = useDispatch();
+  const onLoad = useCallback(() => {
+    dispatch(uploadFileCancelAction());
   }, [dispatch]);
   return onLoad;
 }

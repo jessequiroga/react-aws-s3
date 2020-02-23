@@ -1,4 +1,5 @@
 import React from "react";
+import { Container, ProgressBar } from "react-bootstrap";
 import {
   useUploadFileAction,
   useSelectedFileAction,
@@ -45,6 +46,12 @@ function FileUploader(): React.ReactElement {
           Upload
         </button>
       </form>
+      <div className="prog-container" style={{ width: 300 }}>
+        <ProgressBar
+          now={uploadState.progress}
+          label={`${uploadState.progress}%`}
+        />
+      </div>
     </>
   );
 }

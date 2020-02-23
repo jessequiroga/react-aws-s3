@@ -1,7 +1,10 @@
 import AWS, { AWSError } from "aws-sdk";
 import { s3Instance, s3Bucket } from "./getS3Intance";
 
-function uploadUsingPutMethod(file: File): Promise<string> {
+function uploadUsingPutMethod(
+  file: File,
+  callbackFn: Function
+): Promise<string> {
   return new Promise(function upload(resolve, reject) {
     const params: AWS.S3.PutObjectRequest = {
       Bucket: s3Bucket,
@@ -10,14 +13,20 @@ function uploadUsingPutMethod(file: File): Promise<string> {
       Body: file
     };
 
-    s3Instance.putObject(params).send((err: AWSError) => {
-      if (err) {
-        reject(new Error(`Request is failed - ${err}`));
-      } else {
-        console.log("success");
-        resolve(`test/${file.name}`);
-      }
-    });
+    s3Instance
+      .putObject(params)
+      .on("httpUploadProgress", function prog(evt) {
+        const curProg = Math.round((evt.loaded * 100) / evt.total);
+        callbackFn(curProg);
+      })
+      .send((err: AWSError) => {
+        if (err) {
+          reject(new Error(`Request is failed - ${err}`));
+        } else {
+          console.log("success");
+          resolve(`test/${file.name}`);
+        }
+      });
   });
 }
 
@@ -52,12 +61,12 @@ function uploadUsingPresignedUrl(file: File): Promise<string> {
   });
 }
 
-function uploadFile(file: File): Promise<string> {
+function uploadFile(file: File, callbackFn: Function): Promise<string> {
   console.log(
     `Env setting: ${process.env.REACT_APP_S3_KEY} ${process.env.REACT_APP_S3_SECRET} ${process.env.REACT_APP_BUCKET_REGION} ${process.env.REACT_APP_BUCKET_NAME}`
   );
 
-  return uploadUsingPutMethod(file);
+  return uploadUsingPutMethod(file, callbackFn);
   // return uploadUsingPresignedUrl(file);
 }
 
