@@ -1,5 +1,24 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## How to use
+You can run the app with "yarn install" and "yarn start".
+But this project alse requires minio server or aws s3 server.
+
+### `Run with minio`
+ * download minio at [https://min.io/download](https://min.io/download).
+ * run minio server  
+    minio.exe server D:\TestServer  
+ * make directory "dvtest2020" in your server path. this is a bucket.
+ * make sure that the endpoint of minio is same with the endpoint in "getS3Intance.ts" file.
+
+### `Run with AWS S3`
+ * create a .env file in this directory.
+ * add settings of your S3 to .env file.   
+   * REACT_APP_S3_KEY={your s3 key}    
+   * REACT_APP_S3_SECRET= {your s3 secret key}   
+   * REACT_APP_BUCKET_NAME={your s3 bucket name}   
+   * REACT_APP_BUCKET_REGION={your s3 region}   
+
 ## Available Scripts
 
 In the project directory, you can run:
