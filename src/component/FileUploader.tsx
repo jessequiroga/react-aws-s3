@@ -39,7 +39,7 @@ function FileUploader(): React.ReactElement {
       <p>
         {`Status: ${uploadState.status}, File: ${
           uploadState.file ? uploadState.file.name : ""
-        }`}
+        }, Error: ${uploadState.error}`}
       </p>
       <form onSubmit={onSubmitClicked}>
         <button type="submit" id="file-upload-button">

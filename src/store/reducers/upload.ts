@@ -4,14 +4,14 @@ import { actionTypes } from "../actions/upload";
 export interface FileUploadState {
   file: File | null;
   status: string;
-  error: boolean;
+  error: string;
   progress: number;
   uploadedKey: string;
 }
 const initialState: FileUploadState = {
   file: null,
   status: "init",
-  error: false,
+  error: "",
   progress: 0,
   uploadedKey: ""
 };
@@ -25,7 +25,7 @@ const uploadReducer = handleActions(
           ...state,
           file: action.payload.file,
           status: "file selected",
-          error: false
+          error: ""
         };
       }
       console.log(
@@ -36,13 +36,13 @@ const uploadReducer = handleActions(
     [actionTypes.UPLOAD_FILE]: (state: FileUploadState) => {
       if (state.file) {
         console.log(`upload file${state.file.name}`);
-        return { ...state, status: "pending", error: false, uploadedUrl: "" };
+        return { ...state, status: "pending", error: "", uploadedKey: "" };
       }
       return state;
     },
     [actionTypes.UPLOAD_FILE_START]: (state: FileUploadState) => {
       console.log("upload start");
-      return { ...state, status: "in progress", error: false, uploadedUrl: "" };
+      return { ...state, status: "in progress", error: "", uploadedKey: "" };
     },
     [actionTypes.UPLOAD_FILE_PROGRESS]: (state: FileUploadState, action) => {
       console.log("upload progress");
@@ -53,13 +53,13 @@ const uploadReducer = handleActions(
       return {
         ...state,
         status: "done",
-        error: false,
+        error: "",
         uploadedKey: action.payload.uploadedKey
       };
     },
-    [actionTypes.UPLOAD_FILE_FAILED]: (state: FileUploadState) => {
+    [actionTypes.UPLOAD_FILE_FAILED]: (state: FileUploadState, action) => {
       console.log("upload failed");
-      return { ...state, status: "error", error: true };
+      return { ...state, status: "error", error: action.payload.error };
     },
     [actionTypes.UPLOAD_FILE_CANCEL]: (state: FileUploadState) => {
       console.log("upload cancel require");

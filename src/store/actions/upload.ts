@@ -32,7 +32,7 @@ export const uploadFileSuccessAction = createAction(
 );
 export const uploadFileFailedAction = createAction(
   actionTypes.UPLOAD_FILE_FAILED,
-  (error: boolean) => ({ error })
+  (error: string) => ({ error })
 );
 export const uploadFileCancelAction = createAction(
   actionTypes.UPLOAD_FILE_CANCEL

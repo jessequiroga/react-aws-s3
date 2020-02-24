@@ -12,16 +12,15 @@ function uploadUsingPutMethod(
       ContentType: file.type,
       Body: file
     };
-
-    s3Instance
-      .putObject(params)
+    const req = s3Instance.putObject(params);
+    req
       .on("httpUploadProgress", function prog(evt) {
         const curProg = Math.round((evt.loaded * 100) / evt.total);
         callbackFn(curProg);
       })
       .send((err: AWSError) => {
         if (err) {
-          reject(new Error(`Request is failed - ${err}`));
+          reject(new Error(`Request is failed - ${err.message}`));
         } else {
           console.log("success");
           resolve(`test/${file.name}`);
